@@ -1,0 +1,81 @@
+student@cl18-04:~/Documents/230911004_OS/lab3$ touch f1 f2 f3 f4
+student@cl18-04:~/Documents/230911004_OS/lab3$ ls
+f1  f2  f3  f4
+student@cl18-04:~/Documents/230911004_OS/lab3$ ls f[1-3] 
+f1  f2  f3
+student@cl18-04:~/Documents/230911004_OS/lab3$ ls f[0-9]
+f1  f2  f3  f4
+student@cl18-04:~/Documents/230911004_OS/lab3$ cat >p1.sh
+echo "This folder contents: "
+ls -l
+echo "Sample text written to file" >f1.txt
+echo "File COntent: "
+cat f1.txt
+^Z
+[1]+  Stopped                 cat > p1.sh
+student@cl18-04:~/Documents/230911004_OS/lab3$ cat p1.sh
+echo "This folder contents: "
+ls -l
+echo "Sample text written to file" >f1.txt
+echo "File COntent: "
+cat f1.txt
+student@cl18-04:~/Documents/230911004_OS/lab3$ 
+
+
+ex1:
+student@cl18-04:~/Documents/230911004_OS/lab3$ ./p3.sh
+new
+File is a directory yo
+student@cl18-04:~/Documents/230911004_OS/lab3$ cat p3.sh 
+read filename
+if [ -d "$filename" ]; then
+   echo "File is a directory yo"
+else
+   echo "File is a file yo"
+fi
+
+ex2:
+student@cl18-04:~/Documents/230911004_OS/lab3$ cat p4.sh
+read input
+read folder
+find "$folder" -type f -exec grep -l "$input" {} +
+
+
+
+
+student@cl18-04:~/Documents/230911004_OS/lab3$ cat >check1.txt
+text text 1234
+^C
+student@cl18-04:~/Documents/230911004_OS/lab3$ ./p4.sh
+text
+new
+new/check1.txt
+new/check.txt
+
+
+ex4:
+student@cl18-04:~/Documents/230911004_OS/lab3$ cat p5.sh
+read -p "ENter basic salary: " basics
+read -p "ENter travel allowance yo: " ta
+gs=$(echo "$basics + $ta + ($basics * 0.1)" | bc)
+echo "Gross salary issss: $gs"
+
+
+ex3:
+student@cl18-04:~/Documents/230911004_OS/lab3$ nano p6.sh
+student@cl18-04:~/Documents/230911004_OS/lab3$ cat p6.sh
+find . -type f -name "*.txt" | while read -r filepath; do
+	direp=$(dirname "$filepath")
+	filename=$(basename "$filepath" .txt)
+	new="${direp}/${filename}.text"
+	mv "$filepath" "$new"
+	echo "renamed: $filepath to $new"
+done
+
+student@cl18-04:~/Documents/230911004_OS/lab3$ ./p6.sh
+renamed: ./f1.txt to ./f1.text
+renamed: ./new/check1.txt to ./new/check1.text
+renamed: ./new/check.txt to ./new/check.text
+renamed: ./f2.txt to ./f2.text
+
+
