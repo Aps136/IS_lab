@@ -122,3 +122,40 @@ sed -i '2~2d' "$filename"
 echo "done"
 
 
+#prime
+aps@KVK-OFFICE-DELL:~$ cat p2.sh
+#!/bin/bash
+read num
+if (( num<=1 )); then
+        echo "$num is not a prime number."
+        exit 0
+fi
+if (( num==2 )); then
+        echo "$num is a prime number."
+        exit 0
+fi
+for (( i=2; i*i <= num; i++ ));do
+        if (( num % i == 0 )); then
+                echo "$num is not a prime number"
+                exit 0
+        fi
+done
+echo "$num is a prime number"
+
+#factorial
+aps@KVK-OFFICE-DELL:~$ cat p3.sh
+#!/bin/bash
+read -p "Enter number: " num
+orig=$num
+c=1
+if (( num<0 )); then
+        echo "Error"
+        exit 1
+fi
+while (( num>0 )); do
+        c=$((c * num))
+        num=$((num - 1))
+done
+echo "$c is the factorial of orig"
+aps@KVK-OFFICE-DELL:~$
+
