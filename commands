@@ -52,15 +52,6 @@ new
 new/check1.txt
 new/check.txt
 
-
-ex4:
-student@cl18-04:~/Documents/230911004_OS/lab3$ cat p5.sh
-read -p "ENter basic salary: " basics
-read -p "ENter travel allowance yo: " ta
-gs=$(echo "$basics + $ta + ($basics * 0.1)" | bc)
-echo "Gross salary issss: $gs"
-
-
 ex3:
 student@cl18-04:~/Documents/230911004_OS/lab3$ nano p6.sh
 student@cl18-04:~/Documents/230911004_OS/lab3$ cat p6.sh
@@ -77,5 +68,57 @@ renamed: ./f1.txt to ./f1.text
 renamed: ./new/check1.txt to ./new/check1.text
 renamed: ./new/check.txt to ./new/check.text
 renamed: ./f2.txt to ./f2.text
+
+ex4:
+student@cl18-04:~/Documents/230911004_OS/lab3$ cat p5.sh
+read -p "ENter basic salary: " basics
+read -p "ENter travel allowance yo: " ta
+gs=$(echo "$basics + $ta + ($basics * 0.1)" | bc)
+echo "Gross salary issss: $gs"
+
+
+
+
+
+ex5:
+aps@KVK-OFFICE-DELL:~$ cat p1.sh
+#!/bin/bash
+read -p "Enter extension: " extension
+read -p "Enter name of folder: " folder
+if [ -z "$extension" ] || [ -z "$folder" ]; then
+        echo "Error"
+        exit 1
+fi
+mkdir -p "$folder"
+extension="${extension#.}"
+files=( *."$extension" )
+cp "${files[@]}" "$folder/"
+echo "Done"
+
+ex6:
+#!/bin/bash
+
+echo "Modifying files in the current directory..."
+
+# Loop through all regular files in the current directory
+for file in *; do
+    if [ -f "$file" ]; then
+        echo "Processing: $file"
+        sed -i -E 's/(^|[^.])ex:/ example:/g' "$file" # Replace with example:
+       
+    fi
+done
+
+echo "Modification complete. Check your files. ✔️"
+
+ex7:
+#!/bin/bash
+read -p "Enter name of file: " filename
+if [ ! -f "$filename" ]; then
+        echo "Error"
+        exit 1
+fi
+sed -i '2~2d' "$filename"
+echo "done"
 
 
