@@ -4,8 +4,12 @@ from Crypto.Util.Padding import pad, unpad
 
 message = b"Performance Testing of Encryption Algorithms"
 
-des_secret_key = b"A1B2C3D4!"
-aes_secret_key = b"0123456789abcdef0123456789abcdef0123456789abcdef"
+# Corrected DES key: Must be exactly 8 bytes (64 bits)
+des_secret_key = b"A1B2C3D4"
+
+# Corrected AES-256 key: Must be exactly 32 bytes (256 bits)
+# This key is now 32 characters long.
+aes_secret_key = b"0123456789abcdef0123456789abcdef" 
 
 number_of_runs = 10000
 
@@ -46,9 +50,9 @@ print("\nAES-256 is generally **faster** and **more secure** than DES.")
 if aes_enc_time < des_enc_time:
     print(f"AES-256 encryption was **{des_enc_time / aes_enc_time:.2f} times faster** than DES encryption.")
 else:
-    print(f"DES encryption was **{aes_enc_time / des_enc_time:.2f} times faster** than AES-256 encryption. (This is highly unusual!)")
+    print(f"DES encryption was **{aes_enc_time / aes_enc_time:.2f} times faster** than AES-256 encryption. (This is highly unusual!)")
 
 if aes_dec_time < des_dec_time:
     print(f"AES-256 decryption was **{des_dec_time / aes_dec_time:.2f} times faster** than DES decryption.")
 else:
-    print(f"DES decryption was **{aes_dec_time / aes_dec_time:.2f} times faster** than AES-256 decryption. (This is highly unusual!)")
+    print(f"DES decryption was **{des_dec_time / aes_dec_time:.2f} times faster** than AES-256 decryption. (This is highly unusual!)")
