@@ -159,3 +159,44 @@ done
 echo "$c is the factorial of orig"
 aps@KVK-OFFICE-DELL:~$
 
+
+LAB4
+ex1:
+  GNU nano 7.2                         ex1.sh                                   
+sourcef="$1"
+destf="$2"
+if [ ! -f "$sourcef" ]; then
+echo "Error, file DNE"
+exit 1
+fi
+cp "$sourcef" "$destf"
+if [ $? -eq 0 ]; then
+echo "successfull"
+else
+echo "not done"
+exit 1
+fi
+
+tudent@cl18-04:~/Documents/230911004_OS/lab4$ ./ex1.sh f1 f2
+successfull
+
+EX2
+student@cl18-04:~/Documents/230911004_OS/lab4$ cat ex2.sh
+for file in "$@"; do
+if [ -f "$file" ]; then
+rm -i "$file"
+else
+echo "Warning: file not found"
+fi
+done
+echo "Script  finished"
+
+
+1  2.save  c2.sh  cla1.sh  commands  ex1.sh  ex2.sh  f1  f2
+student@cl18-04:~/Documents/230911004_OS/lab4$ ./ex2.sh f2
+rm: remove regular file 'f2'? y
+Script  finished
+
+
+
+
