@@ -198,5 +198,215 @@ rm: remove regular file 'f2'? y
 Script  finished
 
 
+EX3
+aps@KVK-OFFICE-DELL:~$ cat ex1.sh
+customsort(){
+local arr=("$@")
+local n=${#arr[@]}
+local i j temp
+for((i=0; i<n-1; i++)); do
+for((j=0; j<n-i-1; j++)); do
+if [[ "${arr[j]}" > "${arr[j+1]}" ]]; then
+temp="${arr[j]}"
+arr[j]="${arr[j+1]}"
+arr[j+1]="$temp"
+fi
+done
+done
+echo "${arr[@]}"
+}
+read -r -a sortedresultarr <<< "$(customsort "$@")"
+for arg in "${sortedresultarr[@]}"; do
+echo "- $arg"
+done
+exit 0
+aps@KVK-OFFICE-DELL:~$ ./ex1.sh "hey" "im" "aparna"
+- aparna
+- hey
+- im
+
+EX4
+aps@KVK-OFFICE-DELL:~$ cat ex2.sh
+countl=0
+cwords=0
+cchars=0
+inpfile=""
+cline(){
+local file="$1"
+if [ -f "$file" ] && [ -r "$file" ]; then
+local lc=$(wc -l < "$file" | awk '{print $1}')
+echo "Lines: $lc"
+else
+echo "cannot read lines from file"
+return 1
+fi
+}
+countwords(){
+local file="$1"
+if [ -f "$file" ] && [ -r "$file" ]; then
+local wc=$(wc -w < "$file" | awk '{print $1}')
+echo "words: $wc"
+else
+echo "Error"
+return 1
+fi
+}
+countchars(){
+local file="$1"
+if [ -f "$file" ] && [ -r "$file" ]; then
+local cc=$(wc -c < "$file" | awk '{print $1}')
+echo "charachters: $cc"
+else
+echo "Error"
+return 1
+fi
+}
+dispusage(){
+echo "Options: "
+echo " -l Count lines "
+echo " -w Count words "
+echo " -c Count characters "
+echo ""
+exit 1
+}
+allarg=("$@")
+if [ "$#" -eq 0 ]; then
+dispusage
+fi
+for arg in "${allarg[@]}"; do
+case "$arg" in
+-l)
+countl=1
+;;
+-w)
+cwords=1
+;;
+-c)
+cchars=1
+;;
+*)
+inpfile="$arg"
+;;
+esac
+done
+if [ "$countl" -eq 1 ]; then
+cline "$inpfile"
+fi
+if [ "$cwords" -eq 1 ]; then
+countwords "$inpfile"
+fi
+if [ "$cchars" -eq 1 ]; then
+countchars "$inpfile"
+fi 
+aps@KVK-OFFICE-DELL:~$ ./ex2.sh -l file.txt
+Lines: 2
+aps@KVK-OFFICE-DELL:~$ ./ex2.sh -w file.txt
+words: 4
+aps@KVK-OFFICE-DELL:~$ ./ex2.sh -c file.txt
+charachters: 23
+
+EX5
+inpfile=""
+patterns=()
+dispusage(){
+echo " <patternN>: One or more patterns to search/ del. enclose patterns within quotes"
+echo " <inpfile>: path to the file to process"
+echo ""
+exit 1
+}
+buildgrep(){
+local patterns=("$@")
+local regex=""
+local first=1
+for p in "${patterns[@]}"; do
+if [ "$first" -eq 1 ]; then
+regex="$p"
+first=0
+else
+regex+="|$p"
+fi
+done
+echo "$regex"
+}
+
+buildsed(){
+local patterns=("$@")
+local seds=""
+for p in "${patterns[@]}"; do
+local escaped=$(echo "$p" | sed 's/\//\\\//g')
+seds+="s/$escaped//g;"
+done
+echo "$seds"
+}
+searchp(){
+local file="$1"
+shift
+local patterns=("$@")
+local regg=$(buildgrep "${patterns[@]}")
+if grep -E "$regg" "$file";then
+echo "pattern matched"
+fi
+}
+delp(){
+local file="$1"
+shift
+local patterns=("$@")
+local seds=$(buildsed "${patterns[@]}")
+sed -E -i "$seds" "$file"
+echo "All occurences of patterns deleted from file"
+}
+disp(){
+echo "Menu"
+echo "a) Search for patterns"
+echo "b) delete all occurences of patterns"
+echo "c) exit"
+}
+if [ "$#" -lt 2 ]; then
+dispusage
+fi
+numargs=$#
+inpfile="${@:$numargs:1}"
+patternsa=("${@:1:$((numargs - 1))}")
+while true; do
+disp
+read -p "Enter ur choice: " choice
+case "$choice" in
+a|A)
+searchp "$inpfile" "${patternsa[@]}"
+;;
+b|B)
+delp "$inpfile" "${patternsa[@]}"
+;;
+c|C)
+echo "Exiting..."
+exit 0
+;;
+*)
+echo "Invalid choice"
+;;
+esac
+done
+aps@KVK-OFFICE-DELL:~$ ./ex3.sh yoyo file.txt
+Menu
+a) Search for patterns
+b) delete all occurences of patterns
+c) exit
+Enter ur choice: a
+patterns here yoyoyo
+yoyoyo
+pattern matched
+Menu
+a) Search for patterns
+b) delete all occurences of patterns
+c) exit
+Enter ur choice: b
+All occurences of patterns deleted from file
+Menu
+a) Search for patterns
+b) delete all occurences of patterns
+c) exit
+Enter ur choice: c
+Exiting...
+
 
 
