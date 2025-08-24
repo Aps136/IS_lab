@@ -1,14 +1,15 @@
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
-message = b"Top Secret Data"
-# A valid 24-byte (192-bit) key for AES-192
-key = b"0123456789abcdef01234567"
+message=b"Top Secret Data"
+key =b"FEDCBA9876543210FEDCBA9876543210"
 cipher = AES.new(key, AES.MODE_ECB)
-paddedm = pad(message, AES.block_size)
-ciphert = cipher.encrypt(paddedm)
-decryptedpad = cipher.decrypt(ciphert)
-origm = unpad(decryptedpad, AES.block_size)
-print(f"Original Message: {origm.decode()}")
-print(f"Key: {key.hex()}")
-print(f"CipherText: {ciphert.hex()}")
-print(f"Decrypted Message: {origm.decode()}")
+paddedm = pad(message, AES.MODE_ECB)
+ciphert =cipher.encrypt(paddedm)
+
+decrypted = cipher.decrypt(ciphert)
+origm = unpad(decrypted,AES.block_size)
+
+print("Original Message: ",message.decode())
+print("Key :", key.decode())
+print("Ciphert: ",ciphert.hex())
+print("Decrypted message: ",origm.decode())
